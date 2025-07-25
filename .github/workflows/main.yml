@@ -1,0 +1,77 @@
+name: Flutter Desktop Build
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+    
+    - name: Enable Windows desktop support
+      run: flutter config --enable-windows-desktop
+    
+    - name: Get dependencies
+      run: flutter pub get
+    
+    - name: Build Windows release
+      run: flutter build windows --release
+    
+    - name: Prepare artifacts
+      run: |
+        # 创建压缩包
+        7z a -tzip flutter_windows_release.zip ./build/windows/x64/runner/Release/*
+    
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: flutter-windows-build
+        path: flutter_windows_release.zip
+
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+    
+    - name: Install Linux dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+    
+    - name: Enable Linux desktop support
+      run: |
+        flutter config --enable-linux-desktop
+        dart pub global activate flutter_distributor
+    
+    - name: Get dependencies
+      run: flutter pub get
+    
+    - name: Build Linux release
+      run: |
+        flutter build linux --release
+        flutter_distributor release --name=dev --jobs=release-dev-linux-deb
+        flutter_distributor release --name=dev --jobs=release-dev-linux-rpm
+    
+    - name: Prepare artifacts
+      run: |
+        # 创建压缩包
+        cd dist/
+        zip -r flutter_linux_release.zip ./*
+    
+    - name: Upload Linux artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: flutter-linux-build
+        path: dist/flutter_linux_release.zip
