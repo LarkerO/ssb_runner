@@ -1,0 +1,36 @@
+display_name: SSB Competition Listening Training
+package_name: ssbrunner
+
+maintainer:
+  name: Jing Luo
+  email: example@example.com
+
+priority: optional
+
+section: x11
+
+installed_size: 15700
+
+dependencies:
+  - mpv
+
+essential: false
+
+icon: linux/assets/logo.png
+
+postuninstall_scripts:
+  - echo "Sorry to see you go."
+
+keywords:
+  - Amateur Radio
+  - HAM
+  - SSB
+  - Competition
+
+generic_name: API Client
+
+categories:
+  - Development
+  - Utility
+
+startup_notify: true

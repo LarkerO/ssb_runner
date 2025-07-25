@@ -1,0 +1,28 @@
+display_name: SSB Competition Listening Training
+icon: linux/assets/logo.png
+summary: A Software for SSB Competition Listening Training, inspired by MorseRunner.
+group: Applications/Development Tools
+vendor: Jing Luo
+packager: Jing Luo
+packagerEmail: example@example.com
+license: GPL 3.0
+url: https://github.com/SSBContestRunner/ssb_contest_runner
+
+build_arch: x86_64
+
+requires:
+  - mpv
+
+keywords:
+  - Amateur Radio
+  - HAM
+  - SSB
+  - Competition
+
+generic_name: SSBRunner
+
+categories:
+  - Development
+  - Utility
+
+startup_notify: true
